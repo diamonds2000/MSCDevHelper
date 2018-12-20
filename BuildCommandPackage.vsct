@@ -15,10 +15,10 @@
         defining some of the constants that we will use inside the file. -->
 
   <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
-  <Extern href="stdidcmd.h"/>
+  <Extern href="stdidcmd.h" />
 
   <!--This header contains the command ids for the menus provided by the shell. -->
-  <Extern href="vsshlids.h"/>
+  <Extern href="vsshlids.h" />
 
   <!--The Commands section is where commands, menus, and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
@@ -36,8 +36,8 @@
          group as the part of a menu contained between two lines. The parent of a group
          must be a menu. -->
     <Groups>
-      <Group guid="guidBuildCommandPackageCmdSet" id="MyMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+      <Group guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
       </Group>
     </Groups>
 
@@ -53,10 +53,21 @@
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
       <Button guid="guidBuildCommandPackageCmdSet" id="BuildCommandId" priority="0x0100" type="Button">
-        <Parent guid="guidBuildCommandPackageCmdSet" id="MyMenuGroup" />
-        <Icon guid="guidImages" id="bmpPic1" />
+        <Parent guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" />
         <Strings>
-          <ButtonText>Invoke BuildCommand</ButtonText>
+          <ButtonText>Build AdamsPlugin</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidBuildCommandPackageCmdSet" id="cmdidBuildAdamsPluginUI" priority="0x0100" type="Button">
+        <Parent guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" />
+        <Strings>
+          <ButtonText>Build AdamsPlugin with UI</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidBuildCommandPackageCmdSet" id="cmdidBuildAdamsScons" priority="0x0100" type="Button">
+        <Parent guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" />
+        <Strings>
+          <ButtonText>Build AdamsScons</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -68,7 +79,6 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
             inside a button definition. An important aspect of this declaration is that the element id
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages" href="Resources\BuildCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
     </Bitmaps>
   </Commands>
 
@@ -78,17 +88,10 @@
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidBuildCommandPackageCmdSet" value="{f4378b59-f16c-404a-9357-d23b4faba9f1}">
-      <IDSymbol name="MyMenuGroup" value="0x1020" />
+      <IDSymbol name="BuildMenuGroup" value="0x1020" />
       <IDSymbol name="BuildCommandId" value="0x0100" />
-    </GuidSymbol>
-
-    <GuidSymbol name="guidImages" value="{fb46b36c-ff9e-4438-92df-97ee3aef5f97}" >
-      <IDSymbol name="bmpPic1" value="1" />
-      <IDSymbol name="bmpPic2" value="2" />
-      <IDSymbol name="bmpPicSearch" value="3" />
-      <IDSymbol name="bmpPicX" value="4" />
-      <IDSymbol name="bmpPicArrows" value="5" />
-      <IDSymbol name="bmpPicStrikethrough" value="6" />
+      <IDSymbol name="cmdidBuildAdamsPluginUI" value="0x0101" />
+      <IDSymbol name="cmdidBuildAdamsScons" value="0x0102" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

@@ -54,8 +54,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BuildCommand.cs" />
+    <Compile Include="BuildAdamsScons.cs" />
+    <Compile Include="BuildAdamsPlugin.cs" />
     <Compile Include="BuildCommandPackage.cs" />
+    <Compile Include="BuildAdamsPluginUI.cs" />
+    <Compile Include="CmdHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,8 +73,10 @@
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
     <Content Include="index.html" />
+    <Content Include="Resources\BuildAdamsScons.png" />
     <Content Include="Resources\BuildCommand.png" />
     <Content Include="Resources\BuildCommandPackage.ico" />
+    <Content Include="Resources\Build_AdamsPluginUI.png" />
     <Content Include="stylesheet.css" />
   </ItemGroup>
   <ItemGroup>
