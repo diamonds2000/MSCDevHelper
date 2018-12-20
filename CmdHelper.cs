@@ -68,15 +68,67 @@ namespace MSCDevHelper
             return "";
         }
 
+        EnvDTE.OutputWindowPane getBuildOutputPane()
+        {
+            EnvDTE.OutputWindowPane pane = null;
+            if (_dte != null)
+            {
+                EnvDTE.OutputWindowPanes panes = _dte.ToolWindows.OutputWindow.OutputWindowPanes;
+                pane = panes.Item("生成");
+                if (pane == null)
+                {
+                    pane = _dte.ToolWindows.OutputWindow.OutputWindowPanes.Item("build");
+                }
+            }
+            return pane;
+        }
+
         public void ExecBat(string batfile, string args)
         {
-            ProcessStartInfo si = new ProcessStartInfo();
-            si.FileName = batfile;
-            si.Arguments = args;
-            si.UseShellExecute = true;
-            si.WorkingDirectory = getSandDirectory();
+            Execute(batfile, args, getSandDirectory());
+        }
 
-            Process.Start(si);
+        public void ExecuteCmd(string command, string workDir)
+        {
+            Execute("cmd.exe", "/c " + command, workDir);
+        }
+
+        public void Execute(string exe, string args, string workDir)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            bool buildPaneIsActive = false;
+            EnvDTE.OutputWindowPane pane = getBuildOutputPane();
+            if (!buildPaneIsActive)
+            {
+                pane.Activate();
+                buildPaneIsActive = true;
+            }
+
+            ProcessStartInfo si = new ProcessStartInfo();
+            si.FileName = exe;
+            si.Arguments = args;
+            si.UseShellExecute = false;
+            si.RedirectStandardOutput = true;
+            if (workDir.Length > 0)
+            {
+                si.WorkingDirectory = workDir;
+            }
+
+            Process proc = new Process();
+            proc.StartInfo = si;
+            proc.OutputDataReceived += new DataReceivedEventHandler(OnOutputDataReceived);
+            proc.Start();
+            proc.BeginOutputReadLine();
+        }
+
+        private void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            EnvDTE.OutputWindowPane pane = getBuildOutputPane();
+            if (pane != null && !String.IsNullOrEmpty(e.Data))
+            {
+                pane.OutputString(e.Data + "\r");
+            }
         }
     }
 }
