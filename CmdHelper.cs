@@ -12,6 +12,7 @@ namespace MSCDevHelper
     {
         private AsyncPackage _package;
         private EnvDTE80.DTE2 _dte;
+        private string _outputPane;
 
         public CmdHelper(AsyncPackage package)
         {
@@ -24,7 +25,7 @@ namespace MSCDevHelper
             }
         }
 
-        public string FindDirectoryInUpstream(string path, string dirName)
+        private string FindDirectoryInUpstream(string path, string dirName)
         {
             string ret = String.Empty;
             DirectoryInfo di = new DirectoryInfo(path);
@@ -39,6 +40,11 @@ namespace MSCDevHelper
             }
 
             return ret;
+        }
+
+        public void setOutputPane(string outputPane)
+        {
+            _outputPane = outputPane;
         }
 
         public void getSandEnv()
@@ -84,9 +90,14 @@ namespace MSCDevHelper
             return null;
         }
 
-        EnvDTE.OutputWindowPane getBuildOutputPane()
+        EnvDTE.OutputWindowPane getOutputPane(string outputPane)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (String.IsNullOrEmpty(outputPane))
+            {
+                return null;
+            }
 
             EnvDTE.OutputWindowPane pane = null;
             if (_dte != null)
@@ -95,22 +106,11 @@ namespace MSCDevHelper
 
                 try
                 {
-                    pane = panes.Item("build");
+                    pane = panes.Item(outputPane);
                 }
                 catch (ArgumentException ex)
                 {
                     Trace.Fail(ex.Message);
-                }
-                if (pane == null)
-                {
-                    try
-                    {
-                        pane = panes.Item("生成");
-                    }
-                    catch (ArgumentException ex)
-                    {
-                        Trace.Fail(ex.Message);
-                    }
                 }
             }
             return pane;
@@ -143,7 +143,7 @@ namespace MSCDevHelper
 
             bool buildPaneIsActive = false;
             EnvDTE.OutputWindow outputWin = getOutputWindow();
-            EnvDTE.OutputWindowPane pane = getBuildOutputPane();
+            EnvDTE.OutputWindowPane pane = getOutputPane(_outputPane);
             if (outputWin != null && pane != null)
             {
                 if (!buildPaneIsActive)
@@ -174,7 +174,7 @@ namespace MSCDevHelper
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(_package.DisposalToken);
 
-            EnvDTE.OutputWindowPane pane = getBuildOutputPane();
+            EnvDTE.OutputWindowPane pane = getOutputPane(_outputPane);
             if (pane != null && !String.IsNullOrEmpty(e.Data))
             {
                 pane.OutputString(e.Data + "\r");

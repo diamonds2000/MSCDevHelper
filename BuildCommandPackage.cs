@@ -71,7 +71,9 @@ namespace MSCDevHelper
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await BuildAdamsPlugin.InitializeAsync(this);
             await BuildAdamsPluginUI.InitializeAsync(this);
+            await BuildAdamsScripting.InitializeAsync(this);
             await BuildAdamsScons.InitializeAsync(this);
+            await LaunchAdams.InitializeAsync(this);
         }
 
         #endregion

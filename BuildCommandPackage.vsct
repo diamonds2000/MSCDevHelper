@@ -61,23 +61,35 @@
               <CommandFlag>DefaultInvisible</CommandFlag>
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
-      <Button guid="guidBuildCommandPackageCmdSet" id="BuildCommandId" priority="0x0100" type="Button">
+      <Button guid="guidBuildCommandPackageCmdSet" id="cmdidBuildAdamsPlugin" priority="0x0100" type="Button">
         <Parent guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" />
         <Strings>
           <ButtonText>Build AdamsPlugin</ButtonText>
         </Strings>
       </Button>
-      <Button guid="guidBuildCommandPackageCmdSet" id="cmdidBuildAdamsPluginUI" priority="0x0100" type="Button">
+      <Button guid="guidBuildCommandPackageCmdSet" id="cmdidBuildAdamsPluginUI" priority="0x0101" type="Button">
         <Parent guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" />
         <Strings>
           <ButtonText>Build AdamsPlugin with UI</ButtonText>
         </Strings>
       </Button>
-      <Button guid="guidBuildCommandPackageCmdSet" id="cmdidBuildAdamsScons" priority="0x0100" type="Button">
+      <Button guid="guidBuildCommandPackageCmdSet" id="cmdidBuildAdamsScripting" priority="0x0102" type="Button">
+          <Parent guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" />
+          <Strings>
+              <ButtonText>Build AdamsPlugin Scripting</ButtonText>
+          </Strings>
+      </Button>
+      <Button guid="guidBuildCommandPackageCmdSet" id="cmdidBuildAdamsScons" priority="0x0103" type="Button">
         <Parent guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" />
         <Strings>
           <ButtonText>Build AdamsScons</ButtonText>
         </Strings>
+      </Button>
+      <Button guid="guidBuildCommandPackageCmdSet" id="cmdidLaunchAdams2" priority="0x0104" type="Button">
+          <Parent guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" />
+          <Strings>
+              <ButtonText>Launch Adams 2.0</ButtonText>
+          </Strings>
       </Button>
     </Buttons>
 
@@ -101,9 +113,11 @@
     <GuidSymbol name="guidBuildCommandPackageCmdSet" value="{f4378b59-f16c-404a-9357-d23b4faba9f1}">
       <IDSymbol name="MSCDev" value ="0x0100"/>
       <IDSymbol name="BuildMenuGroup" value="0x1020" />
-      <IDSymbol name="BuildCommandId" value="0x0101" />
+      <IDSymbol name="cmdidBuildAdamsPlugin" value="0x0101" />
       <IDSymbol name="cmdidBuildAdamsPluginUI" value="0x0102" />
       <IDSymbol name="cmdidBuildAdamsScons" value="0x0103" />
+      <IDSymbol name="cmdidBuildAdamsScripting" value="0x0104" />
+      <IDSymbol name="cmdidLaunchAdams2" value="0x0110" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

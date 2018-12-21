@@ -93,6 +93,7 @@ namespace MSCDevHelper
             string batFile = "sand.bat";
             string args = "scons -t adams_plugin";
             CmdHelper cmdHelper = new CmdHelper(this.package);
+            cmdHelper.setOutputPane("build");
             cmdHelper.ExecBat(batFile, args);
         }
     }

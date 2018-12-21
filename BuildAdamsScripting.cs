@@ -10,12 +10,12 @@ namespace MSCDevHelper
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class BuildAdamsPluginUI
+    internal sealed class BuildAdamsScripting
     {
         /// <summary>
         /// Command ID.
         /// </summary>
-        public const int CommandId = 0x0102;
+        public const int CommandId = 0x0104;
 
         /// <summary>
         /// Command menu group (command set GUID).
@@ -28,11 +28,11 @@ namespace MSCDevHelper
         private readonly AsyncPackage package;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BuildAdamsPluginUI"/> class.
+        /// Initializes a new instance of the <see cref="BuildAdamsScripting"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        private BuildAdamsPluginUI(AsyncPackage package, OleMenuCommandService commandService)
+        private BuildAdamsScripting(AsyncPackage package, OleMenuCommandService commandService)
         {
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -45,7 +45,7 @@ namespace MSCDevHelper
         /// <summary>
         /// Gets the instance of the command.
         /// </summary>
-        public static BuildAdamsPluginUI Instance
+        public static BuildAdamsScripting Instance
         {
             get;
             private set;
@@ -62,6 +62,10 @@ namespace MSCDevHelper
             }
         }
 
+        /// <summary>
+        /// Initializes the singleton instance of the command.
+        /// </summary>
+        /// <param name="package">Owner package, not null.</param>
         public static async Task InitializeAsync(AsyncPackage package)
         {
             // Switch to the main thread - the call to AddCommand in BuildCommand's constructor requires
@@ -69,7 +73,7 @@ namespace MSCDevHelper
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
             OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-            Instance = new BuildAdamsPluginUI(package, commandService);
+            Instance = new BuildAdamsScripting(package, commandService);
         }
 
         /// <summary>
@@ -84,7 +88,7 @@ namespace MSCDevHelper
             ThreadHelper.ThrowIfNotOnUIThread();
 
             string batFile = "sand.bat";
-            string args = "scons -t uiadams_plugin";
+            string args = "scons -t adams_scripting";
             CmdHelper cmdHelper = new CmdHelper(this.package);
             cmdHelper.setOutputPane("build");
             cmdHelper.ExecBat(batFile, args);
