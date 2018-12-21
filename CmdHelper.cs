@@ -10,10 +10,13 @@ namespace MSCDevHelper
 {
     class CmdHelper
     {
+        private AsyncPackage _package;
         private EnvDTE80.DTE2 _dte;
 
         public CmdHelper(AsyncPackage package)
         {
+            _package = package;
+
             if (_dte == null)
             {
                 package.GetServiceAsync(typeof(EnvDTE.DTE)).Wait();
@@ -68,16 +71,46 @@ namespace MSCDevHelper
             return "";
         }
 
+        EnvDTE.OutputWindow getOutputWindow()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (_dte != null)
+            {
+                EnvDTE.OutputWindow ouputWin = _dte.ToolWindows.OutputWindow;
+                return ouputWin;
+            }
+
+            return null;
+        }
+
         EnvDTE.OutputWindowPane getBuildOutputPane()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             EnvDTE.OutputWindowPane pane = null;
             if (_dte != null)
             {
                 EnvDTE.OutputWindowPanes panes = _dte.ToolWindows.OutputWindow.OutputWindowPanes;
-                pane = panes.Item("生成");
+
+                try
+                {
+                    pane = panes.Item("build");
+                }
+                catch (ArgumentException ex)
+                {
+                    Trace.Fail(ex.Message);
+                }
                 if (pane == null)
                 {
-                    pane = _dte.ToolWindows.OutputWindow.OutputWindowPanes.Item("build");
+                    try
+                    {
+                        pane = panes.Item("生成");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Trace.Fail(ex.Message);
+                    }
                 }
             }
             return pane;
@@ -85,11 +118,15 @@ namespace MSCDevHelper
 
         public void ExecBat(string batfile, string args)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             Execute(batfile, args, getSandDirectory());
         }
 
         public void ExecuteCmd(string command, string workDir)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             Execute("cmd.exe", "/c " + command, workDir);
         }
 
@@ -97,23 +134,34 @@ namespace MSCDevHelper
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
+            Execute(exe, args, workDir, false);
+        }
+
+        public void Execute(string exe, string args, string workDir, bool showWindow)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             bool buildPaneIsActive = false;
+            EnvDTE.OutputWindow outputWin = getOutputWindow();
             EnvDTE.OutputWindowPane pane = getBuildOutputPane();
-            if (!buildPaneIsActive)
+            if (outputWin != null && pane != null)
             {
-                pane.Activate();
-                buildPaneIsActive = true;
+                if (!buildPaneIsActive)
+                {
+                    outputWin.Parent.Activate();
+                    pane.Activate();
+                    buildPaneIsActive = true;
+                }
+                pane.Clear();
             }
 
             ProcessStartInfo si = new ProcessStartInfo();
-            si.FileName = exe;
+            si.FileName = workDir + exe;
             si.Arguments = args;
             si.UseShellExecute = false;
             si.RedirectStandardOutput = true;
-            if (workDir.Length > 0)
-            {
-                si.WorkingDirectory = workDir;
-            }
+            si.CreateNoWindow = !showWindow;
+            si.WorkingDirectory = workDir;
 
             Process proc = new Process();
             proc.StartInfo = si;
@@ -122,8 +170,10 @@ namespace MSCDevHelper
             proc.BeginOutputReadLine();
         }
 
-        private void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
+        private async void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(_package.DisposalToken);
+
             EnvDTE.OutputWindowPane pane = getBuildOutputPane();
             if (pane != null && !String.IsNullOrEmpty(e.Data))
             {
