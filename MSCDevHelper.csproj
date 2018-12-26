@@ -54,6 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CommandBase.cs" />
     <Compile Include="LaunchAdams.cs" />
     <Compile Include="BuildAdamsScripting.cs" />
     <Compile Include="BuildAdamsScons.cs" />

@@ -52,6 +52,17 @@ namespace MSCDevHelper
             ThreadHelper.ThrowIfNotOnUIThread();
         }
 
+        public bool isOpenSolution()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (_dte != null)
+            {
+                return !String.IsNullOrEmpty(_dte.Solution.FullName);
+            }
+
+            return false;
+        }
+
         public string getSandDirectory()
         {
             ThreadHelper.ThrowIfNotOnUIThread();

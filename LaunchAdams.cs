@@ -10,56 +10,10 @@ namespace MSCDevHelper
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class LaunchAdams
+    internal sealed class LaunchAdams : CommandBase
     {
-        /// <summary>
-        /// Command ID.
-        /// </summary>
-        public const int CommandId = 0x0110;
-
-        /// <summary>
-        /// Command menu group (command set GUID).
-        /// </summary>
-        public static readonly Guid CommandSet = new Guid("f4378b59-f16c-404a-9357-d23b4faba9f1");
-
-        /// <summary>
-        /// VS Package that provides this command, not null.
-        /// </summary>
-        private readonly AsyncPackage package;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LaunchAdams"/> class.
-        /// Adds our command handlers for menu (commands must exist in the command table file)
-        /// </summary>
-        /// <param name="package">Owner package, not null.</param>
-        private LaunchAdams(AsyncPackage package, OleMenuCommandService commandService)
+        private LaunchAdams(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, 0x0110)
         {
-            this.package = package ?? throw new ArgumentNullException(nameof(package));
-            commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-
-            var menuCommandID = new CommandID(CommandSet, CommandId);
-            var menuItem = new MenuCommand(this.Execute, menuCommandID);
-            commandService.AddCommand(menuItem);
-        }
-
-        /// <summary>
-        /// Gets the instance of the command.
-        /// </summary>
-        public static LaunchAdams Instance
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets the service provider from the owner package.
-        /// </summary>
-        private Microsoft.VisualStudio.Shell.IAsyncServiceProvider ServiceProvider
-        {
-            get
-            {
-                return this.package;
-            }
         }
 
         /// <summary>
@@ -83,7 +37,7 @@ namespace MSCDevHelper
         /// </summary>
         /// <param name="sender">Event sender.</param>
         /// <param name="e">Event args.</param>
-        private void Execute(object sender, EventArgs e)
+        override protected void Execute(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
