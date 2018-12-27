@@ -44,6 +44,7 @@ namespace MSCDevHelper
             string batFile = "sand.bat";
             string args = "adamsscons";
             CmdHelper cmdHelper = new CmdHelper(this.package);
+            cmdHelper.setOutputPane("build"); 
             cmdHelper.ExecBat(batFile, args);
         }
     }
