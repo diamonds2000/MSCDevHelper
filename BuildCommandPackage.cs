@@ -33,6 +33,8 @@ namespace MSCDevHelper
     /// </para>
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.ShellInitialized_string, PackageAutoLoadFlags.BackgroundLoad)]
+    //[ProvideAutoLoad(VSConstants.UICONTEXT.SolutionOpening_string, PackageAutoLoadFlags.BackgroundLoad)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(BuildCommandPackage.PackageGuidString)]
@@ -74,6 +76,7 @@ namespace MSCDevHelper
             await BuildAdamsScripting.InitializeAsync(this);
             await BuildAdamsScons.InitializeAsync(this);
             await LaunchAdams.InitializeAsync(this);
+            await SubCommandGenerator.InitializeAsync(this);
         }
 
         #endregion
