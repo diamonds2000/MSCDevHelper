@@ -79,7 +79,10 @@ namespace MSCDevHelper
             EnvDTE80.DTE2 dte = GetDTE();
             if (dte != null)
             {
-                return !String.IsNullOrEmpty(dte.Solution.FullName);
+                if (!String.IsNullOrEmpty(dte.Solution.FullName))
+                {
+                    return dte.Solution.FileName.StartsWith("Adams");
+                }
             }
 
             return false;
