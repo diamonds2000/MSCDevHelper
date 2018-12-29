@@ -30,6 +30,8 @@ namespace MSCDevHelper
 
             [DataMember(Name = "WorkingDir")]
             public string itemWorkingDir = "";
+
+            public bool includeRelPath = false;
         }
 
         [CollectionDataContract]
@@ -64,13 +66,27 @@ namespace MSCDevHelper
             //    {"Name":"Command_2","Command":"Explorer.exe","Arguments":"d:\\", "WorkingDir":""},
             //    {"Name":"Command_3","Command":"Explorer.exe","Arguments":"e:\\", "WorkingDir":""}
             //]
-            string configFile = @"F:\CustomMenu.json";
+            // $(SolutionRoot) which resides in the field Command, Arguments and WorkingDir stands for root directory of the solution.
+
+            string configFile = Path.Combine(this.package.UserDataPath + "\\CustomMenu.json");
             if (File.Exists(configFile))
             {
                 using (FileStream fs = new FileStream(configFile, FileMode.Open))
                 {
                     DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(CustomMenu));
                     customMenu = ser.ReadObject(fs) as CustomMenu;
+                }
+
+                for (int i = 0; i < customMenu.Count; i++)
+                {
+                    CustomMenuItem item = customMenu[i];
+                    if (item.itemName.IndexOf("$(SolutionRoot)") != -1 ||
+                        item.itemCommandExe.IndexOf("$(SolutionRoot)") != -1 ||
+                        item.itemCommandArgs.IndexOf("$(SolutionRoot)") != -1 ||
+                        item.itemWorkingDir.IndexOf("$(SolutionRoot)") != -1)
+                    {
+                        item.includeRelPath = true;
+                    }
                 }
             }
         }
@@ -91,6 +107,21 @@ namespace MSCDevHelper
             }
         }
 
+        private string ExpandRelativePath(string relativePath)
+        {
+            string path = "";
+
+            string solutionRoot = this.package.getSolutionRootDirectory();
+            if (!String.IsNullOrEmpty(solutionRoot))
+            {
+                path = relativePath.Replace("$(SolutionRoot)", solutionRoot);
+                path = path.Replace("\\\\", "\\");
+                return path;
+            }
+
+            return "";
+        }
+
         private void OnBeforeQueryStatus(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -102,6 +133,7 @@ namespace MSCDevHelper
                 if (index >= 0 && index < customMenu.Count)
                 {
                     menuCommand.Text = customMenu[index].itemName;
+                    menuCommand.Enabled = (!customMenu[index].includeRelPath || package.IsOpenSolution());
                 }
             }
         }
@@ -118,9 +150,10 @@ namespace MSCDevHelper
                 {
                     CustomMenuItem item = customMenu[index];
 
-                    string exeFile = item.itemCommandExe;
-                    string args = item.itemCommandArgs;
-                    string workingDir = item.itemWorkingDir;
+                    string exeFile = ExpandRelativePath(item.itemCommandExe);
+                    string args = ExpandRelativePath(item.itemCommandArgs);
+                    string workingDir = ExpandRelativePath(item.itemWorkingDir);
+
                     CmdHelper cmdHelper = new CmdHelper(this.package);
                     cmdHelper.ExecuteCmd(exeFile, args, workingDir);
                 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -90,6 +91,48 @@ namespace MSCDevHelper
             }
 
             return false;
+        }
+
+        private string FindDirectoryInUpstream(string path, string dirName)
+        {
+            string ret = String.Empty;
+            DirectoryInfo di = new DirectoryInfo(path);
+            while (di != null)
+            {
+                if (String.Compare(di.Name, dirName, true) == 0)
+                {
+                    ret = di.FullName;
+                    break;
+                }
+                di = di.Parent;
+            }
+
+            return ret;
+        }
+
+        public string getSolutionRootDirectory()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            EnvDTE80.DTE2 dte = GetDTE();
+            if (dte != null)
+            {
+                if (dte.Solution.FullName.Length > 0)
+                {
+                    string solutionPath = Path.GetDirectoryName(dte.Solution.FullName);
+                    string pluginPath = FindDirectoryInUpstream(solutionPath, "Plugins");
+                    string sandDir = Directory.GetParent(pluginPath).FullName;
+                    if (Directory.Exists(sandDir))
+                    {
+                        return sandDir;
+                    }
+                }
+                else
+                {
+                    //Assert
+                }
+            }
+            return "";
         }
 
         #region Package Members

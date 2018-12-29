@@ -18,23 +18,6 @@ namespace MSCDevHelper
             _package = package;
         }
 
-        private string FindDirectoryInUpstream(string path, string dirName)
-        {
-            string ret = String.Empty;
-            DirectoryInfo di = new DirectoryInfo(path);
-            while (di != null)
-            {
-                if (String.Compare(di.Name, dirName, true) == 0)
-                {
-                    ret = di.FullName;
-                    break;
-                }
-                di = di.Parent;
-            }
-
-            return ret;
-        }
-
         public void setOutputPane(string outputPane)
         {
             _outputPane = outputPane;
@@ -43,32 +26,6 @@ namespace MSCDevHelper
         public void getSandEnv()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-        }
-
-        public string getSandDirectory()
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            EnvDTE80.DTE2 dte = _package.GetDTE();
-            if (dte != null)
-            {
-                if (dte.Solution.FullName.Length > 0)
-                {
-                    string solutionPath = Path.GetDirectoryName(dte.Solution.FullName);
-                    string pluginPath = FindDirectoryInUpstream(solutionPath, "Plugins");
-                    string sandDir = Path.Combine(pluginPath, @"..\");
-                    DirectoryInfo di = new DirectoryInfo(sandDir);
-                    if (di.Exists)
-                    {
-                        return sandDir;
-                    }
-                }
-                else
-                {
-                    //Assert
-                }
-            }
-            return "";
         }
 
         EnvDTE.OutputWindow getOutputWindow()
@@ -116,7 +73,7 @@ namespace MSCDevHelper
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            Execute(batfile, args, getSandDirectory());
+            Execute(batfile, args, _package.getSolutionRootDirectory());
         }
 
         public void ExecuteConsoleCmd(string command, string workDir)
@@ -158,8 +115,15 @@ namespace MSCDevHelper
                 pane.Clear();
             }
 
+            // is exe relative path?
+            if (exe.IndexOf(":") == -1)
+            {
+                exe = workDir + "\\" + exe;
+                exe = exe.Replace("\\\\", "\\");
+            }
+
             ProcessStartInfo si = new ProcessStartInfo();
-            si.FileName = workDir + exe;
+            si.FileName = exe;
             si.Arguments = args;
             si.UseShellExecute = false;
             si.RedirectStandardOutput = true;
