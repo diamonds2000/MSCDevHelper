@@ -134,11 +134,18 @@ namespace MSCDevHelper
             Execute(batfile, args, getSandDirectory());
         }
 
-        public void ExecuteCmd(string command, string workDir)
+        public void ExecuteConsoleCmd(string command, string workDir)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             Execute("cmd.exe", "/c " + command, workDir);
+        }
+
+        public void ExecuteCmd(string exe, string args, string workDir)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            Execute(exe, args, workDir);
         }
 
         public void Execute(string exe, string args, string workDir)

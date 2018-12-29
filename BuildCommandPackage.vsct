@@ -38,6 +38,13 @@
                     <ButtonText>MSC Dev</ButtonText>
                 </Strings>
             </Menu>
+            <Menu guid="guidBuildCommandPackageCmdSet" id="SubMenu" priority="0x0100" type="Menu">
+                <Parent guid="guidBuildCommandPackageCmdSet" id="ExplorerMenuGroup"/>
+                <Strings>
+                    <ButtonText>Custom Command</ButtonText>
+                    <CommandName>Custom Command</CommandName>
+                </Strings>
+            </Menu>
         </Menus>
 
         <!-- In this section you can define new menu groups. A menu group is a container for
@@ -48,8 +55,14 @@
             <Group guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" priority="0x0600">
                 <Parent guid="guidBuildCommandPackageCmdSet" id="MSCDev" />
             </Group>
-            <Group guid="guidBuildCommandPackageCmdSet" id="LaunchMenuGroup" priority="0x0700">
+            <Group guid="guidBuildCommandPackageCmdSet" id="LaunchMenuGroup" priority="0x0601">
                 <Parent guid="guidBuildCommandPackageCmdSet" id="MSCDev" />
+            </Group>
+            <Group guid="guidBuildCommandPackageCmdSet" id="ExplorerMenuGroup" priority="0x0602">
+              <Parent guid="guidBuildCommandPackageCmdSet" id="MSCDev" />
+            </Group>
+            <Group guid="guidBuildCommandPackageCmdSet" id="SubMenuGroup" priority="0x0800">
+                <Parent guid="guidBuildCommandPackageCmdSet" id="SubMenu"/>
             </Group>
         </Groups>
 
@@ -94,6 +107,14 @@
                     <ButtonText>Launch Adams 2.0</ButtonText>
                 </Strings>
             </Button>
+          <Button guid="guidBuildCommandPackageCmdSet" id="cmdidSubCommand" priority="0x0105" type="Button">
+              <Parent guid="guidBuildCommandPackageCmdSet" id="SubMenuGroup" />
+            <CommandFlag>DynamicItemStart</CommandFlag>
+            <Strings>
+                  <CommandName>cmdidSubCommand</CommandName>
+                  <ButtonText>CommandPlaceHolder</ButtonText>
+              </Strings>
+          </Button>
         </Buttons>
 
         <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
@@ -114,13 +135,17 @@
         </GuidSymbol>
         <!-- This is the guid used to group the menu commands together -->
         <GuidSymbol name="guidBuildCommandPackageCmdSet" value="{f4378b59-f16c-404a-9357-d23b4faba9f1}">
-            <IDSymbol name="MSCDev" value ="0x0100"/>
+            <IDSymbol name="MSCDev" value="0x0200"/>
+            <IDSymbol name="SubMenu" value="0x0201"/>
             <IDSymbol name="BuildMenuGroup" value="0x1020" />
             <IDSymbol name="LaunchMenuGroup" value="0x1021" />
+            <IDSymbol name="ExplorerMenuGroup" value="0x1022" />
+            <IDSymbol name="SubMenuGroup" value="0x1023" />
             <IDSymbol name="cmdidBuildAdamsPlugin" value="0x0101" />
             <IDSymbol name="cmdidBuildAdamsPluginUI" value="0x0102" />
             <IDSymbol name="cmdidBuildAdamsScons" value="0x0103" />
             <IDSymbol name="cmdidBuildAdamsScripting" value="0x0104" />
+            <IDSymbol name="cmdidSubCommand" value="0x0105" />
             <IDSymbol name="cmdidLaunchAdams2" value="0x0110" />
         </GuidSymbol>
     </Symbols>
