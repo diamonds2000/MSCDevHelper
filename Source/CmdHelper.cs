@@ -10,19 +10,12 @@ namespace MSCDevHelper
 {
     class CmdHelper
     {
-        private AsyncPackage _package;
-        private EnvDTE80.DTE2 _dte;
+        private BuildCommandPackage _package;
         private string _outputPane;
 
-        public CmdHelper(AsyncPackage package)
+        public CmdHelper(BuildCommandPackage package)
         {
             _package = package;
-
-            if (_dte == null)
-            {
-                package.GetServiceAsync(typeof(EnvDTE.DTE)).Wait();
-                _dte = package.GetServiceAsync(typeof(EnvDTE.DTE)).GetAwaiter().GetResult() as EnvDTE80.DTE2;
-            }
         }
 
         private string FindDirectoryInUpstream(string path, string dirName)
@@ -52,26 +45,16 @@ namespace MSCDevHelper
             ThreadHelper.ThrowIfNotOnUIThread();
         }
 
-        public bool isOpenSolution()
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            if (_dte != null)
-            {
-                return !String.IsNullOrEmpty(_dte.Solution.FullName);
-            }
-
-            return false;
-        }
-
         public string getSandDirectory()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (_dte != null)
+            EnvDTE80.DTE2 dte = _package.GetDTE();
+            if (dte != null)
             {
-                if (_dte.Solution.FullName.Length > 0)
+                if (dte.Solution.FullName.Length > 0)
                 {
-                    string solutionPath = Path.GetDirectoryName(_dte.Solution.FullName);
+                    string solutionPath = Path.GetDirectoryName(dte.Solution.FullName);
                     string pluginPath = FindDirectoryInUpstream(solutionPath, "Plugins");
                     string sandDir = Path.Combine(pluginPath, @"..\");
                     DirectoryInfo di = new DirectoryInfo(sandDir);
@@ -92,9 +75,10 @@ namespace MSCDevHelper
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (_dte != null)
+            EnvDTE80.DTE2 dte = _package.GetDTE();
+            if (dte != null)
             {
-                EnvDTE.OutputWindow ouputWin = _dte.ToolWindows.OutputWindow;
+                EnvDTE.OutputWindow ouputWin = dte.ToolWindows.OutputWindow;
                 return ouputWin;
             }
 
@@ -110,10 +94,11 @@ namespace MSCDevHelper
                 return null;
             }
 
+            EnvDTE80.DTE2 dte = _package.GetDTE();
             EnvDTE.OutputWindowPane pane = null;
-            if (_dte != null)
+            if (dte != null)
             {
-                EnvDTE.OutputWindowPanes panes = _dte.ToolWindows.OutputWindow.OutputWindowPanes;
+                EnvDTE.OutputWindowPanes panes = dte.ToolWindows.OutputWindow.OutputWindowPanes;
 
                 try
                 {

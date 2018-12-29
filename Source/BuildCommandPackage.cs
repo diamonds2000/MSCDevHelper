@@ -46,6 +46,8 @@ namespace MSCDevHelper
         /// </summary>
         public const string PackageGuidString = "a466c0c2-6778-46cd-8eb4-2e8fc1399c6f";
 
+        private EnvDTE80.DTE2 _dte;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildCommandPackage"/> class.
         /// </summary>
@@ -55,6 +57,32 @@ namespace MSCDevHelper
             // any Visual Studio service because at this point the package object is created but
             // not sited yet inside Visual Studio environment. The place to do all the other
             // initialization is the Initialize method.
+        }
+
+        public EnvDTE80.DTE2 GetDTE()
+        {
+            if (_dte == null)
+            {
+                ThreadHelper.JoinableTaskFactory.Run(async delegate
+                {
+                    _dte = await GetServiceAsync(typeof(EnvDTE.DTE)) as EnvDTE80.DTE2;
+                });
+            }
+
+            return _dte;
+        }
+
+        public bool IsOpenSolution()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            EnvDTE80.DTE2 dte = GetDTE();
+            if (dte != null)
+            {
+                return !String.IsNullOrEmpty(dte.Solution.FullName);
+            }
+
+            return false;
         }
 
         #region Package Members

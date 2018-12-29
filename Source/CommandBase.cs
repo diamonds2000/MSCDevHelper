@@ -28,7 +28,7 @@ namespace MSCDevHelper
         /// <summary>
         /// VS Package that provides this command, not null.
         /// </summary>
-        protected readonly AsyncPackage package;
+        protected readonly BuildCommandPackage package;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandBase"/> class.
@@ -36,7 +36,7 @@ namespace MSCDevHelper
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         /// <param name="commandService">Command service to add command to, not null.</param>
-        protected CommandBase(AsyncPackage package, OleMenuCommandService commandService, int commandId)
+        protected CommandBase(BuildCommandPackage package, OleMenuCommandService commandService, int commandId)
         {
             this.CommandId = commandId;
             this.package = package ?? throw new ArgumentNullException(nameof(package));
@@ -44,7 +44,7 @@ namespace MSCDevHelper
 
             var menuCommandID = new CommandID(CommandSet, commandId);
             var menuItem = new OleMenuCommand(this.Execute, menuCommandID);
-            //menuItem.BeforeQueryStatus += new EventHandler(OnBeforeQueryStatus);
+            menuItem.BeforeQueryStatus += new EventHandler(OnBeforeQueryStatus);
             commandService.AddCommand(menuItem);
         }
 
@@ -70,7 +70,11 @@ namespace MSCDevHelper
 
         protected virtual void OnBeforeQueryStatus(object sender, EventArgs e)
         {
-            int a = 0;
+            var cmd = sender as OleMenuCommand;
+            if (null != cmd)
+            {
+                cmd.Enabled = package.IsOpenSolution();
+            }
         }
 
         /// <summary>

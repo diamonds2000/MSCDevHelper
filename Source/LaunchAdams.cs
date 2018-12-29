@@ -10,9 +10,9 @@ namespace MSCDevHelper
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class BuildAdamsScons : CommandBase
+    internal sealed class LaunchAdams : CommandBase
     {
-        private BuildAdamsScons(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, 0x0103)
+        private LaunchAdams(BuildCommandPackage package, OleMenuCommandService commandService) : base(package, commandService, 0x0110)
         {
         }
 
@@ -20,14 +20,14 @@ namespace MSCDevHelper
         /// Initializes the singleton instance of the command.
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        public static async Task InitializeAsync(AsyncPackage package)
+        public static async Task InitializeAsync(BuildCommandPackage package)
         {
             // Switch to the main thread - the call to AddCommand in BuildCommand's constructor requires
             // the UI thread.
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
             OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-            Instance = new BuildAdamsScons(package, commandService);
+            Instance = new LaunchAdams(package, commandService);
         }
 
         /// <summary>
@@ -42,9 +42,9 @@ namespace MSCDevHelper
             ThreadHelper.ThrowIfNotOnUIThread();
 
             string batFile = "sand.bat";
-            string args = "adamsscons";
+            string args = "runadams";
             CmdHelper cmdHelper = new CmdHelper(this.package);
-            cmdHelper.setOutputPane("build"); 
+            cmdHelper.setOutputPane("debug");
             cmdHelper.ExecBat(batFile, args);
         }
     }

@@ -27,6 +27,9 @@ namespace MSCDevHelper
 
             [DataMember(Name = "Arguments")]
             public string itemCommandArgs = "";
+
+            [DataMember(Name = "WorkingDir")]
+            public string itemWorkingDir = "";
         }
 
         [CollectionDataContract]
@@ -34,7 +37,7 @@ namespace MSCDevHelper
         {
         }
 
-        private AsyncPackage package;
+        private BuildCommandPackage package;
 
         private int baseCmdID = 0x105;
 
@@ -42,7 +45,7 @@ namespace MSCDevHelper
 
         private List<CustomMenuItem> customMenu = new List<CustomMenuItem>();
 
-        public static async Task InitializeAsync(AsyncPackage package)
+        public static async Task InitializeAsync(BuildCommandPackage package)
         {
             // Switch to the main thread - the call to AddCommand in BuildCommand's constructor requires
             // the UI thread.
@@ -57,18 +60,22 @@ namespace MSCDevHelper
         {
             // json format
             //[
-	        //    {"Name":"Command_1","Command":"Explorer.exe","Arguments":"c:\\"},
-	        //    {"Name":"Command_2","Command":"Explorer.exe","Arguments":"d:\\"},
-	        //    {"Name":"Command_3","Command":"Explorer.exe","Arguments":"e:\\"}
+            //    {"Name":"Command_1","Command":"Explorer.exe","Arguments":"c:\\"，"WorkingDir":""},
+            //    {"Name":"Command_2","Command":"Explorer.exe","Arguments":"d:\\", "WorkingDir":""},
+            //    {"Name":"Command_3","Command":"Explorer.exe","Arguments":"e:\\", "WorkingDir":""}
             //]
-            using (FileStream fs = new FileStream(@"F:\CustomMenu.json", FileMode.Open))
+            string configFile = @"F:\CustomMenu.json";
+            if (File.Exists(configFile))
             {
-                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(CustomMenu));
-                customMenu = ser.ReadObject(fs) as CustomMenu;
+                using (FileStream fs = new FileStream(configFile, FileMode.Open))
+                {
+                    DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(CustomMenu));
+                    customMenu = ser.ReadObject(fs) as CustomMenu;
+                }
             }
         }
 
-        private void InitSubCmdMenu(AsyncPackage package, OleMenuCommandService mcs)
+        private void InitSubCmdMenu(BuildCommandPackage package, OleMenuCommandService mcs)
         {
             this.package = package;
 
@@ -113,8 +120,9 @@ namespace MSCDevHelper
 
                     string exeFile = item.itemCommandExe;
                     string args = item.itemCommandArgs;
+                    string workingDir = item.itemWorkingDir;
                     CmdHelper cmdHelper = new CmdHelper(this.package);
-                    cmdHelper.ExecuteCmd(exeFile, args, "");
+                    cmdHelper.ExecuteCmd(exeFile, args, workingDir);
                 }
             }
         }
