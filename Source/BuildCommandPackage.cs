@@ -135,6 +135,21 @@ namespace MSCDevHelper
             return "";
         }
 
+        public string ExpandRelativePath(string relativePath)
+        {
+            string path = "";
+
+            string solutionRoot = getSolutionRootDirectory();
+            if (!String.IsNullOrEmpty(solutionRoot))
+            {
+                path = relativePath.Replace("$(SolutionRoot)", solutionRoot);
+                path = path.Replace("\\\\", "\\");
+                return path;
+            }
+
+            return "";
+        }
+
         #region Package Members
 
         /// <summary>

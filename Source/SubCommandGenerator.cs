@@ -107,21 +107,6 @@ namespace MSCDevHelper
             }
         }
 
-        private string ExpandRelativePath(string relativePath)
-        {
-            string path = "";
-
-            string solutionRoot = this.package.getSolutionRootDirectory();
-            if (!String.IsNullOrEmpty(solutionRoot))
-            {
-                path = relativePath.Replace("$(SolutionRoot)", solutionRoot);
-                path = path.Replace("\\\\", "\\");
-                return path;
-            }
-
-            return "";
-        }
-
         private void OnBeforeQueryStatus(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -150,9 +135,9 @@ namespace MSCDevHelper
                 {
                     CustomMenuItem item = customMenu[index];
 
-                    string exeFile = ExpandRelativePath(item.itemCommandExe);
-                    string args = ExpandRelativePath(item.itemCommandArgs);
-                    string workingDir = ExpandRelativePath(item.itemWorkingDir);
+                    string exeFile = package.ExpandRelativePath(item.itemCommandExe);
+                    string args = package.ExpandRelativePath(item.itemCommandArgs);
+                    string workingDir = package.ExpandRelativePath(item.itemWorkingDir);
 
                     CmdHelper cmdHelper = new CmdHelper(this.package);
                     cmdHelper.ExecuteCmd(exeFile, args, workingDir);

@@ -115,13 +115,6 @@ namespace MSCDevHelper
                 pane.Clear();
             }
 
-            // is exe relative path?
-            if (exe.IndexOf(":") == -1)
-            {
-                exe = workDir + "\\" + exe;
-                exe = exe.Replace("\\\\", "\\");
-            }
-
             ProcessStartInfo si = new ProcessStartInfo();
             si.FileName = exe;
             si.Arguments = args;

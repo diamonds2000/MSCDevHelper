@@ -1,0 +1,5 @@
+[
+    {"Name":"Open RTest Dir","Command":"Explorer.exe","Arguments":"$(SolutionRoot)\\qa\\tests\\integration\\plugins\\AdamsPlugin\\UI","WorkingDir":""},
+    {"Name":"Open STest Dir","Command":"Explorer.exe","Arguments":"$(SolutionRoot)\\qa\\tests\\scripting\\Plugins\\AdamsPlugin", "WorkingDir":""},
+    {"Name":"Run All Test","Command":"cmd.exe","Arguments":"/k $(SolutionRoot)\\qa\\tests\\ALL_SCRIPTED_TESTS.bat", "WorkingDir":"$(SolutionRoot)\\qa\\tests"}
+]

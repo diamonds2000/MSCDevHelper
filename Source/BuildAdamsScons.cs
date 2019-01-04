@@ -41,7 +41,7 @@ namespace MSCDevHelper
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            string batFile = "sand.bat";
+            string batFile = this.package.ExpandRelativePath("$(SolutionRoot)\\sand.bat");
             string args = "adamsscons";
             CmdHelper cmdHelper = new CmdHelper(this.package);
             cmdHelper.setOutputPane("build"); 
