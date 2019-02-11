@@ -82,11 +82,13 @@ namespace MSCDevHelper
             {
                 if (!String.IsNullOrEmpty(dte.Solution.FullName))
                 {
-                    string solutionName = System.IO.Path.GetFileName(dte.Solution.FullName);
-                    if (!String.IsNullOrEmpty(solutionName))
-                    {
-                        return solutionName.StartsWith("Adams");
-                    }
+                    //  DO NOT check solution name any longer
+                    //string solutionName = System.IO.Path.GetFileName(dte.Solution.FullName);
+                    //if (!String.IsNullOrEmpty(solutionName))
+                    //{
+                    //    return solutionName.StartsWith("Adams");
+                    //}
+                    return true;
                 }
             }
 
