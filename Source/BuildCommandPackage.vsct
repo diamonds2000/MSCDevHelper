@@ -79,42 +79,20 @@
           If you do not want an image next to your command, remove the Icon node /> -->
             <Button guid="guidBuildCommandPackageCmdSet" id="cmdidBuildAdamsPlugin" priority="0x0100" type="Button">
                 <Parent guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" />
+                <CommandFlag>DynamicItemStart</CommandFlag>
                 <Strings>
-                    <ButtonText>Build AdamsPlugin</ButtonText>
+                    <CommandName>cmdidBuildAdamsPlugin</CommandName>
+                    <ButtonText>Build Adams2 (unavailable)</ButtonText>
                 </Strings>
             </Button>
-            <Button guid="guidBuildCommandPackageCmdSet" id="cmdidBuildAdamsPluginUI" priority="0x0101" type="Button">
-                <Parent guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" />
+            <Button guid="guidBuildCommandPackageCmdSet" id="cmdidSubCommand" priority="0x0150" type="Button">
+                <Parent guid="guidBuildCommandPackageCmdSet" id="SubMenuGroup" />
+                <CommandFlag>DynamicItemStart</CommandFlag>
                 <Strings>
-                    <ButtonText>Build AdamsPlugin with UI</ButtonText>
+                    <CommandName>cmdidSubCommand</CommandName>
+                    <ButtonText>CommandPlaceHolder</ButtonText>
                 </Strings>
             </Button>
-            <Button guid="guidBuildCommandPackageCmdSet" id="cmdidBuildAdamsScripting" priority="0x0102" type="Button">
-                <Parent guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" />
-                <Strings>
-                    <ButtonText>Build AdamsPlugin Scripting</ButtonText>
-                </Strings>
-            </Button>
-            <Button guid="guidBuildCommandPackageCmdSet" id="cmdidBuildAdamsScons" priority="0x0103" type="Button">
-                <Parent guid="guidBuildCommandPackageCmdSet" id="BuildMenuGroup" />
-                <Strings>
-                    <ButtonText>Build AdamsScons</ButtonText>
-                </Strings>
-            </Button>
-            <Button guid="guidBuildCommandPackageCmdSet" id="cmdidLaunchAdams2" priority="0x0104" type="Button">
-                <Parent guid="guidBuildCommandPackageCmdSet" id="LaunchMenuGroup" />
-                <Strings>
-                    <ButtonText>Launch Adams 2.0</ButtonText>
-                </Strings>
-            </Button>
-          <Button guid="guidBuildCommandPackageCmdSet" id="cmdidSubCommand" priority="0x0105" type="Button">
-              <Parent guid="guidBuildCommandPackageCmdSet" id="SubMenuGroup" />
-            <CommandFlag>DynamicItemStart</CommandFlag>
-            <Strings>
-                  <CommandName>cmdidSubCommand</CommandName>
-                  <ButtonText>CommandPlaceHolder</ButtonText>
-              </Strings>
-          </Button>
         </Buttons>
 
         <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
@@ -142,11 +120,7 @@
             <IDSymbol name="ExplorerMenuGroup" value="0x1022" />
             <IDSymbol name="SubMenuGroup" value="0x1023" />
             <IDSymbol name="cmdidBuildAdamsPlugin" value="0x0101" />
-            <IDSymbol name="cmdidBuildAdamsPluginUI" value="0x0102" />
-            <IDSymbol name="cmdidBuildAdamsScons" value="0x0103" />
-            <IDSymbol name="cmdidBuildAdamsScripting" value="0x0104" />
-            <IDSymbol name="cmdidSubCommand" value="0x0105" />
-            <IDSymbol name="cmdidLaunchAdams2" value="0x0110" />
+            <IDSymbol name="cmdidSubCommand" value="0x0150" />
         </GuidSymbol>
     </Symbols>
 </CommandTable>

@@ -56,16 +56,10 @@
     <DeployExtension>False</DeployExtension>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Source\CommandBase.cs" />
-    <Compile Include="Source\LaunchAdams.cs" />
-    <Compile Include="Source\BuildAdamsScripting.cs" />
-    <Compile Include="Source\BuildAdamsScons.cs" />
-    <Compile Include="Source\BuildAdamsPlugin.cs" />
+    <Compile Include="Source\CustomCommands.cs" />
     <Compile Include="Source\BuildCommandPackage.cs" />
-    <Compile Include="Source\BuildAdamsPluginUI.cs" />
     <Compile Include="Source\CmdHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Source\SubCommandGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />

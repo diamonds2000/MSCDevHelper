@@ -1,5 +1,98 @@
 [
-    {"Name":"Open RTest Dir","Command":"Explorer.exe","Arguments":"$(SolutionRoot)\\qa\\tests\\integration\\plugins\\AdamsPlugin\\UI","WorkingDir":""},
-    {"Name":"Open STest Dir","Command":"Explorer.exe","Arguments":"$(SolutionRoot)\\qa\\tests\\scripting\\Plugins\\AdamsPlugin", "WorkingDir":""},
-    {"Name":"Run All Test","Command":"cmd.exe","Arguments":"/k $(SolutionRoot)\\qa\\tests\\ALL_SCRIPTED_TESTS.bat", "WorkingDir":"$(SolutionRoot)\\qa\\tests"}
+    {
+        "Name":"Build AdamsPlugin",
+        "MenuHierarchy":"",
+        "Command":"$(SolutionRoot)\\sand.bat",
+        "Arguments":"scons -t adams_plugin",
+        "WorkingDir":"$(SolutionRoot)",
+        "OutputToVS":"build"
+    },
+    {
+        "Name":"Build AdamsPluginUI",
+        "MenuHierarchy":"",
+        "Command":"$(SolutionRoot)\\sand.bat",
+        "Arguments":"scons -t uiadams_plugin",
+        "WorkingDir":"$(SolutionRoot)",
+        "OutputToVS":"build"
+    },
+    {
+        "Name":"Build Adams Scripting",
+        "MenuHierarchy":"",
+        "Command":"$(SolutionRoot)\\sand.bat",
+        "Arguments":"scons -t adams_scripting",
+        "WorkingDir":"$(SolutionRoot)",
+        "OutputToVS":"build"
+    },
+    {
+        "Name":"Build Adams Service",
+        "MenuHierarchy":"",
+        "Command":"$(SolutionRoot)\\sand.bat",
+        "Arguments":"scons -t acs",
+        "WorkingDir":"$(SolutionRoot)",
+        "OutputToVS":"build"
+    },
+    {
+        "Name":"Build Adams All",
+        "MenuHierarchy":"",
+        "Command":"$(SolutionRoot)\\sand.bat",
+        "Arguments":"adamsscons",
+        "WorkingDir":"$(SolutionRoot)",
+        "OutputToVS":"build"
+    },
+    {
+        "Name":"Launch Adams",
+        "MenuHierarchy":"",
+        "Command":"$(SolutionRoot)\\sand.bat",
+        "Arguments":"runadams",
+        "WorkingDir":"$(SolutionRoot)",
+        "OutputToVS":"debug"
+    },
+    {
+        "Name":"Show Build Env",
+        "MenuHierarchy":"ExplorerMenu",
+        "Command":"$(SolutionRoot)\\sand.bat",
+        "Arguments":"env",
+        "WorkingDir":"$(SolutionRoot)",
+        "OutputToVS":"build"
+    },
+    {
+        "Name":"Switch to Debug Version",
+        "MenuHierarchy":"ExplorerMenu",
+        "Command":"$(SolutionRoot)\\sand.bat",
+        "Arguments":"-b debug env",
+        "WorkingDir":"$(SolutionRoot)",
+        "OutputToVS":"build"
+    },
+    {
+        "Name":"Switch to Vtune Version",
+        "MenuHierarchy":"ExplorerMenu",
+        "Command":"$(SolutionRoot)\\sand.bat",
+        "Arguments":"-b vtune env",
+        "WorkingDir":"$(SolutionRoot)",
+        "OutputToVS":"build"
+    },
+    {
+        "Name":"Open RTest Dir2",
+        "MenuHierarchy":"ExplorerMenu",
+        "Command":"Explorer.exe",
+        "Arguments":"$(SolutionRoot)\\qa\\tests\\integration\\plugins\\AdamsPlugin\\UI",
+        "WorkingDir":"",
+        "OutputToVS":""
+    },
+    {
+        "Name":"Open STest Dir2",
+        "MenuHierarchy":"ExplorerMenu",
+        "Command":"Explorer.exe",
+        "Arguments":"$(SolutionRoot)\\qa\\tests\\scripting\\Plugins\\AdamsPlugin", 
+        "WorkingDir":"",
+        "OutputToVS":""
+    },
+    {
+        "Name":"Run All Test2",
+        "MenuHierarchy":"ExplorerMenu",
+        "Command":"cmd.exe",
+        "Arguments":"/k $(SolutionRoot)\\qa\\tests\\ALL_SCRIPTED_TESTS.bat", 
+        "WorkingDir":"$(SolutionRoot)\\qa\\tests",
+        "OutputToVS":""
+    }
 ]
