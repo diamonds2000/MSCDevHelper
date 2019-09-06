@@ -88,10 +88,10 @@ namespace MSCDevHelper
                 for (int i = 0; i < _customMenu.Count; i++)
                 {
                     CustomMenuItem item = _customMenu[i];
-                    if (item.name.IndexOf("$(SolutionRoot)") != -1 ||
-                        item.commandExe.IndexOf("$(SolutionRoot)") != -1 ||
-                        item.commandArgs.IndexOf("$(SolutionRoot)") != -1 ||
-                        item.workingDir.IndexOf("$(SolutionRoot)") != -1)
+                    if (item.name.IndexOf("$") != -1 ||
+                        item.commandExe.IndexOf("$") != -1 ||
+                        item.commandArgs.IndexOf("$") != -1 ||
+                        item.workingDir.IndexOf("$") != -1)
                     {
                         item.includeRelPath = true;
                     }
@@ -149,7 +149,7 @@ namespace MSCDevHelper
                 {
                     CustomMenuItem item = _cmdId2MenuItem[menuCommand.CommandID.ID];
                     menuCommand.Text = item.name;
-                    menuCommand.Enabled = (!item.includeRelPath || package.IsOpenSolution());
+                    menuCommand.Enabled = (package.IsOpenSolution());
                 }
             }
         }

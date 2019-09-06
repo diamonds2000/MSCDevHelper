@@ -13,6 +13,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
 using Task = System.Threading.Tasks.Task;
+using System.Collections.Generic;
 
 namespace MSCDevHelper
 {
@@ -49,6 +50,8 @@ namespace MSCDevHelper
 
         private EnvDTE80.DTE2 _dte;
 
+        private Dictionary<string, Func<string>> _predefineVariables;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildCommandPackage"/> class.
         /// </summary>
@@ -58,6 +61,14 @@ namespace MSCDevHelper
             // any Visual Studio service because at this point the package object is created but
             // not sited yet inside Visual Studio environment. The place to do all the other
             // initialization is the Initialize method.
+
+            _predefineVariables = new Dictionary<string, Func<string>>
+            {
+                { "$(SolutionRoot)",             this.getSolutionRootDirectory },
+                { "$(CurrentFile)",              this.getCurrentFile },
+                { "$(VSIX)",                     this.getVsixDirectory },
+                { "$(SelectedText)",             this.getSelectedText }
+            };
         }
 
         public EnvDTE80.DTE2 GetDTE()
@@ -112,6 +123,13 @@ namespace MSCDevHelper
             return ret;
         }
 
+        public string getVsixDirectory()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            return this.UserDataPath;
+        }
+
         public string getSolutionRootDirectory()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -123,7 +141,9 @@ namespace MSCDevHelper
                 {
                     string solutionPath = Path.GetDirectoryName(dte.Solution.FullName);
                     string pluginPath = FindDirectoryInUpstream(solutionPath, "Plugins");
-                    string sandDir = Directory.GetParent(pluginPath).FullName;
+                    string servicePath = FindDirectoryInUpstream(solutionPath, "Services");
+                    string sourcePath = (pluginPath.Length == 0) ? servicePath : pluginPath;
+                    string sandDir = Directory.GetParent(sourcePath).FullName;
                     if (Directory.Exists(sandDir))
                     {
                         return sandDir;
@@ -137,19 +157,56 @@ namespace MSCDevHelper
             return "";
         }
 
+        public string getCurrentFile()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            EnvDTE80.DTE2 dte = GetDTE();
+            if (dte != null && dte.ActiveDocument != null)
+            {
+                return dte.ActiveDocument.FullName;
+            }
+
+            return "";
+        }
+
+        public string getSelectedText()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            EnvDTE80.DTE2 dte = GetDTE();
+            if (dte != null && dte.ActiveDocument != null && dte.ActiveDocument.Selection != null)
+            {
+                EnvDTE.TextSelection selection = dte.ActiveDocument.Selection as EnvDTE.TextSelection;
+                if (selection != null)
+                {
+                    return selection.Text;
+                }
+            }
+
+            return "";
+        }
+
         public string ExpandRelativePath(string relativePath)
         {
             string path = "";
 
-            string solutionRoot = getSolutionRootDirectory();
-            if (!String.IsNullOrEmpty(solutionRoot))
+            foreach (var variable in _predefineVariables)
             {
-                path = relativePath.Replace("$(SolutionRoot)", solutionRoot);
-                path = path.Replace("\\\\", "\\");
-                return path;
+                if (relativePath.IndexOf(variable.Key) != -1)
+                {
+                    string val = variable.Value();
+                    relativePath = relativePath.Replace(variable.Key, val);
+                }
             }
 
-            return "";
+            if (relativePath.IndexOf("$") == -1)
+            {
+                path = relativePath;
+                path = path.Replace("\\\\", "\\");
+            }
+
+            return path;
         }
 
         #region Package Members

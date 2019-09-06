@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="MSCDevHelper.96befb42-f3fc-4b68-8ffc-08235f0885cd" Version="1.3" Language="en-US" Publisher="Company" />
+        <Identity Id="MSCDevHelper.96befb42-f3fc-4b68-8ffc-08235f0885cd" Version="1.4" Language="en-US" Publisher="Company" />
         <DisplayName>MSCDevHelper</DisplayName>
         <Description xml:space="preserve">MSC Dev Helper VSIX Project.</Description>
     </Metadata>
