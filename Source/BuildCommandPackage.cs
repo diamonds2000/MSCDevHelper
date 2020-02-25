@@ -139,15 +139,49 @@ namespace MSCDevHelper
             {
                 if (dte.Solution.FullName.Length > 0)
                 {
+                    string ret = String.Empty;
                     string solutionPath = Path.GetDirectoryName(dte.Solution.FullName);
-                    string pluginPath = FindDirectoryInUpstream(solutionPath, "Plugins");
-                    string servicePath = FindDirectoryInUpstream(solutionPath, "Services");
-                    string sourcePath = (pluginPath.Length == 0) ? servicePath : pluginPath;
-                    string sandDir = Directory.GetParent(sourcePath).FullName;
-                    if (Directory.Exists(sandDir))
+
+                    DirectoryInfo di = new DirectoryInfo(solutionPath);
+                    while (di != null)
                     {
-                        return sandDir;
+                        if (File.Exists(di.FullName + "\\sand.bat"))
+                        {
+                            ret = di.FullName;
+                            break;
+                        }
+                        di = di.Parent;
                     }
+
+                    // may be opening cmake solution
+                    if (ret == String.Empty)
+                    {
+                        di = new DirectoryInfo(solutionPath);
+                        while (di != null)
+                        {
+                            if (Directory.Exists(di.FullName + "\\components") &&
+                                Directory.Exists(di.FullName + "\\sandbox") &&
+                                Directory.Exists(di.FullName + "\\scons"))
+                            {
+                                string outputRoot = di.FullName;
+                                if (outputRoot.EndsWith("_output"))
+                                {
+                                    ret = outputRoot.TrimSuffix("_output");
+                                    if (File.Exists(ret + "\\sand.bat"))
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        ret = String.Empty;
+                                    }
+                                }
+                            }
+                            di = di.Parent;
+                        }
+                    }
+
+                    return ret;
                 }
                 else
                 {
