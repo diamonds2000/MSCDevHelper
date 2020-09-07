@@ -106,6 +106,17 @@ namespace MSCDevHelper
             return false;
         }
 
+        public void saveAllFiles()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            EnvDTE80.DTE2 dte = GetDTE();
+            if (dte != null)
+            {
+                dte.Documents.SaveAll();
+            }
+        }
+
         private string FindDirectoryInUpstream(string path, string dirName)
         {
             string ret = String.Empty;

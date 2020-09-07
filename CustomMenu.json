@@ -5,23 +5,17 @@
         "Command":"$(SolutionRoot)\\sand.bat",
         "Arguments":"scons -t adams_plugin",
         "WorkingDir":"$(SolutionRoot)",
-        "OutputToVS":"build"
+        "OutputToVS":"build",
+        "SaveAllFiles":"true"
     },
     {
         "Name":"Build AdamsPluginUI",
         "MenuHierarchy":"",
         "Command":"$(SolutionRoot)\\sand.bat",
-        "Arguments":"scons -t uiadams_plugin",
+        "Arguments":"scons -t adams_plugin_ui",
         "WorkingDir":"$(SolutionRoot)",
-        "OutputToVS":"build"
-    },
-    {
-        "Name":"Build Adams Scripting",
-        "MenuHierarchy":"",
-        "Command":"$(SolutionRoot)\\sand.bat",
-        "Arguments":"scons -t adams_scripting",
-        "WorkingDir":"$(SolutionRoot)",
-        "OutputToVS":"build"
+        "OutputToVS":"build",
+        "SaveAllFiles":"true"
     },
     {
         "Name":"Build Adams Service",
@@ -29,15 +23,8 @@
         "Command":"$(SolutionRoot)\\sand.bat",
         "Arguments":"scons -t acs",
         "WorkingDir":"$(SolutionRoot)",
-        "OutputToVS":"build"
-    },
-    {
-        "Name":"Build Adams All",
-        "MenuHierarchy":"",
-        "Command":"$(SolutionRoot)\\sand.bat",
-        "Arguments":"adamsscons",
-        "WorkingDir":"$(SolutionRoot)",
-        "OutputToVS":"build"
+        "OutputToVS":"build",
+        "SaveAllFiles":"true"
     },
     {
         "Name":"Launch Adams",
@@ -72,7 +59,7 @@
         "OutputToVS":"build"
     },
     {
-        "Name":"Open RTest Dir2",
+        "Name":"Open RTest Dir",
         "MenuHierarchy":"ExplorerMenu",
         "Command":"Explorer.exe",
         "Arguments":"$(SolutionRoot)\\qa\\tests\\integration\\plugins\\AdamsPlugin\\UI",
@@ -80,7 +67,7 @@
         "OutputToVS":""
     },
     {
-        "Name":"Open STest Dir2",
+        "Name":"Open STest Dir",
         "MenuHierarchy":"ExplorerMenu",
         "Command":"Explorer.exe",
         "Arguments":"$(SolutionRoot)\\qa\\tests\\scripting\\Plugins\\AdamsPlugin", 
@@ -88,11 +75,27 @@
         "OutputToVS":""
     },
     {
-        "Name":"Run All Test2",
+        "Name":"Run All Test",
         "MenuHierarchy":"ExplorerMenu",
         "Command":"cmd.exe",
         "Arguments":"/k $(SolutionRoot)\\qa\\tests\\ALL_SCRIPTED_TESTS.bat", 
         "WorkingDir":"$(SolutionRoot)\\qa\\tests",
+        "OutputToVS":""
+    },
+    {
+        "Name":"Generate Res Snippet",
+        "MenuHierarchy":"ExplorerMenu",
+        "Command":"python.exe",
+        "Arguments":"D:\\DevCode\\GenResString.py $(CurrentFile)", 
+        "WorkingDir":"$(SolutionRoot)",
+        "OutputToVS":"build"
+    },
+    {
+        "Name":"Open vsix folder",
+        "MenuHierarchy":"ExplorerMenu",
+        "Command":"Explorer.exe",
+        "Arguments":"$(VSIX)", 
+        "WorkingDir":"",
         "OutputToVS":""
     }
 ]

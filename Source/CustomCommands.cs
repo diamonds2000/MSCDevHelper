@@ -37,6 +37,9 @@ namespace MSCDevHelper
             [DataMember(Name = "OutputToVS")]
             public string outputToVS = "";
 
+            [DataMember(Name = "SaveAllFiles")]
+            public bool saveAllFiles = false;
+
             public bool includeRelPath = false;
         }
 
@@ -164,6 +167,11 @@ namespace MSCDevHelper
                 if (_cmdId2MenuItem.ContainsKey(menuCommand.CommandID.ID))
                 {
                     CustomMenuItem item = _cmdId2MenuItem[menuCommand.CommandID.ID];
+
+                    if (item.saveAllFiles)
+                    {
+                        package.saveAllFiles();
+                    }
 
                     string exeFile = package.ExpandRelativePath(item.commandExe);
                     string args = package.ExpandRelativePath(item.commandArgs);
