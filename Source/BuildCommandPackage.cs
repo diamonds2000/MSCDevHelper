@@ -151,7 +151,16 @@ namespace MSCDevHelper
                 if (dte.Solution.FullName.Length > 0)
                 {
                     string ret = String.Empty;
-                    string solutionPath = Path.GetDirectoryName(dte.Solution.FullName);
+
+                    string solutionPath;
+                    if (Directory.Exists(dte.Solution.FullName))
+                    {
+                        solutionPath = dte.Solution.FullName;
+                    }
+                    else
+                    {
+                        solutionPath = Path.GetDirectoryName(dte.Solution.FullName);
+                    }
 
                     DirectoryInfo di = new DirectoryInfo(solutionPath);
                     while (di != null)
@@ -178,6 +187,12 @@ namespace MSCDevHelper
                                 if (outputRoot.EndsWith("_output"))
                                 {
                                     ret = outputRoot.TrimSuffix("_output");
+                                    if (!Directory.Exists(ret))
+                                    {
+                                        string parentDir = Path.GetDirectoryName(outputRoot);
+                                        ret = parentDir + "\\src";
+                                    }
+
                                     if (File.Exists(ret + "\\sand.bat"))
                                     {
                                         break;
