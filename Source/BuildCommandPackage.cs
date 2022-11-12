@@ -179,28 +179,16 @@ namespace MSCDevHelper
                         di = new DirectoryInfo(solutionPath);
                         while (di != null)
                         {
-                            if (Directory.Exists(di.FullName + "\\components") &&
-                                Directory.Exists(di.FullName + "\\sandbox") &&
-                                Directory.Exists(di.FullName + "\\scons"))
+                            if (Directory.Exists(di.FullName + "\\src"))
                             {
-                                string outputRoot = di.FullName;
-                                if (outputRoot.EndsWith("_output"))
+                                ret = di.FullName + "\\src";
+                                if (File.Exists(ret + "\\sand.bat"))
                                 {
-                                    ret = outputRoot.TrimSuffix("_output");
-                                    if (!Directory.Exists(ret))
-                                    {
-                                        string parentDir = Path.GetDirectoryName(outputRoot);
-                                        ret = parentDir + "\\src";
-                                    }
-
-                                    if (File.Exists(ret + "\\sand.bat"))
-                                    {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        ret = String.Empty;
-                                    }
+                                    break;
+                                }
+                                else
+                                {
+                                    ret = String.Empty;
                                 }
                             }
                             di = di.Parent;
