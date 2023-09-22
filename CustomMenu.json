@@ -9,7 +9,7 @@
         "SaveAllFiles":"true"
     },
     {
-        "Name":"Build AdamsPluginUI",
+        "Name":"Build AdamsPlugin UI",
         "MenuHierarchy":"",
         "Command":"$(SolutionRoot)\\sand.bat",
         "Arguments":"scons -t adams_plugin_ui",
@@ -18,13 +18,13 @@
         "SaveAllFiles":"true"
     },
     {
-        "Name":"Build Adams Service",
-        "MenuHierarchy":"",
-        "Command":"$(SolutionRoot)\\sand.bat",
-        "Arguments":"scons -t acs",
-        "WorkingDir":"$(SolutionRoot)",
-        "OutputToVS":"build",
-        "SaveAllFiles":"true"
+        "Name": "Build AdamsPlugin GUI",
+        "MenuHierarchy": "",
+        "Command": "$(SolutionRoot)\\sand.bat",
+        "Arguments": "scons -t adams_plugin_gui",
+        "WorkingDir": "$(SolutionRoot)",
+        "OutputToVS": "build",
+        "SaveAllFiles": "true"
     },
     {
         "Name":"Launch Adams",
@@ -57,30 +57,6 @@
         "Arguments":"-b vtune env",
         "WorkingDir":"$(SolutionRoot)",
         "OutputToVS":"build"
-    },
-    {
-        "Name":"Open RTest Dir",
-        "MenuHierarchy":"ExplorerMenu",
-        "Command":"Explorer.exe",
-        "Arguments":"$(SolutionRoot)\\qa\\tests\\integration\\plugins\\AdamsPlugin\\UI",
-        "WorkingDir":"",
-        "OutputToVS":""
-    },
-    {
-        "Name":"Open STest Dir",
-        "MenuHierarchy":"ExplorerMenu",
-        "Command":"Explorer.exe",
-        "Arguments":"$(SolutionRoot)\\qa\\tests\\scripting\\Plugins\\AdamsPlugin", 
-        "WorkingDir":"",
-        "OutputToVS":""
-    },
-    {
-        "Name":"Run All Test",
-        "MenuHierarchy":"ExplorerMenu",
-        "Command":"cmd.exe",
-        "Arguments":"/k $(SolutionRoot)\\qa\\tests\\ALL_SCRIPTED_TESTS.bat", 
-        "WorkingDir":"$(SolutionRoot)\\qa\\tests",
-        "OutputToVS":""
     },
     {
         "Name":"Generate Res Snippet",
